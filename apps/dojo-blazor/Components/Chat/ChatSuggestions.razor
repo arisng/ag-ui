@@ -1,0 +1,26 @@
+<div class="space-y-2">
+    <div class="flex items-center justify-between">
+        <div class="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Quick suggestions</div>
+        <span class="text-[10px] text-muted-foreground">Tap to fill</span>
+    </div>
+    <div class="grid gap-2">
+        @foreach (var suggestion in Suggestions)
+        {
+            <button class="w-full text-left rounded-xl border border-border bg-muted/30 hover:bg-muted/60 transition p-3" type="button">
+                <div class="text-xs font-semibold text-foreground">@suggestion.Title</div>
+                <div class="text-[11px] text-muted-foreground leading-relaxed">@suggestion.Description</div>
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    private readonly List<ChatSuggestion> Suggestions = new()
+    {
+        new("Explain this integration", "Give me a quick overview of the main capabilities."),
+        new("Show setup steps", "Walk me through the initial setup flow."),
+        new("Suggest a demo", "Recommend a live demo I should try next."),
+    };
+
+    private sealed record ChatSuggestion(string Title, string Description);
+}

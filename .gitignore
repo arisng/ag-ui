@@ -17,3 +17,10 @@ node_modules
 .pnpm-store
 
 **/.poetry-cache
+
+# My custom ignores
+.playwright-cli/
+.ralph-sessions/
+**/bin/
+**/.vs/
+**/obj/

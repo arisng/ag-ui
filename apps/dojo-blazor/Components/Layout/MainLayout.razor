@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+
+<div class="h-screen w-screen overflow-hidden bg-background text-foreground flex flex-col md:flex-row">
+    
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between border-b p-2 bg-background z-20">
+        <button class="p-2" @onclick="ToggleMobileSidebar">
+            @if (_isMobileSidebarOpen) { <span>✕</span> } else { <span>☰</span> }
+        </button>
+        <h1 class="text-sm font-medium">AG-UI Interactive Dojo</h1>
+        <div class="w-9"></div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    @if (_isMobileSidebarOpen)
+    {
+        <div class="fixed inset-0 bg-black/50 z-30 md:hidden" @onclick="ToggleMobileSidebar"></div>
+    }
+
+    <!-- Sidebar Wrapper -->
+    <div class="@SidebarClasses">
+        <Sidebar />
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 min-w-0 min-h-0 overflow-hidden relative z-10 p-4">
+        @Body
+    </div>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private bool _isMobileSidebarOpen = false;
+
+    private string SidebarClasses => _isMobileSidebarOpen
+        ? "fixed inset-y-0 left-0 z-40 w-80 bg-background shadow-xl transition-transform duration-300 md:relative md:translate-x-0 md:bg-transparent md:shadow-none h-full border-r"
+        : "hidden md:block md:relative md:h-full border-r";
+        
+    private void ToggleMobileSidebar()
+    {
+        _isMobileSidebarOpen = !_isMobileSidebarOpen;
+    }
+}

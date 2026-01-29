@@ -1,0 +1,84 @@
+@page "/{IntegrationId}/feature/{DemoId}"
+@using DojoBlazor.Components.Shared
+@using DojoBlazor.Models
+
+<PageTitle>@DemoId | Dojo</PageTitle>
+
+<div class="h-full w-full p-4">
+    <div class="bg-white w-full h-full rounded-xl overflow-hidden flex flex-col shadow-sm border border-border">
+        
+        @if (IntegrationId != null && DemoId != null)
+        {
+             @switch (View?.ToLower())
+            {
+                case "code":
+                    <div class="flex-1 flex flex-col">
+                        <div class="p-4 border-b border-border flex items-center justify-between">
+                            <h3 class="font-medium flex items-center gap-2">
+                                <span class="text-muted-foreground text-sm">@IntegrationId /</span>
+                                @DemoId
+                            </h3>
+                            <span class="text-xs px-2 py-1 rounded bg-muted text-muted-foreground font-mono">CODE</span>
+                        </div>
+                        <div class="flex-1 p-8 overflow-auto bg-muted/30 flex items-center justify-center">
+                            <div class="text-center space-y-2">
+                                <div class="text-4xl">💻</div>
+                                <h3 class="text-lg font-medium">Code Viewer</h3>
+                                <p class="text-sm text-muted-foreground max-w-sm">
+                                    Source code for <code>@DemoId</code> would be displayed here using a syntax highlighter.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+
+                case "docs":
+                case "readme":
+                    <div class="flex-1 flex flex-col">
+                         <div class="p-4 border-b border-border flex items-center justify-between">
+                            <h3 class="font-medium flex items-center gap-2">
+                                <span class="text-muted-foreground text-sm">@IntegrationId /</span>
+                                @DemoId
+                            </h3>
+                            <span class="text-xs px-2 py-1 rounded bg-muted text-muted-foreground font-mono">DOCS</span>
+                        </div>
+                        <div class="flex-1 p-8 overflow-auto bg-white flex items-center justify-center">
+                            <div class="text-center space-y-2">
+                                <div class="text-4xl">📖</div>
+                                <h3 class="text-lg font-medium">Documentation</h3>
+                                <p class="text-sm text-muted-foreground max-w-sm">
+                                    README and setup instructions for <code>@DemoId</code> would be rendered here.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+
+                default: // Preview
+                    <div class="flex-1 bg-muted/10 relative">
+                        <div class="absolute inset-0 flex items-center justify-center p-4">
+                            <MockChat />
+                        </div>
+                        @* Overlay label *@
+                        <div class="absolute top-4 left-4">
+                             <span class="text-xs px-2 py-1 rounded bg-white/50 backdrop-blur border border-border text-muted-foreground font-mono shadow-sm">
+                                PREVIEW: @DemoId
+                            </span>
+                        </div>
+                    </div>
+                    break;
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string IntegrationId { get; set; } = "";
+
+    [Parameter]
+    public string DemoId { get; set; } = "";
+
+    [SupplyParameterFromQuery]
+    public string? View { get; set; }
+}

@@ -1,0 +1,56 @@
+<div class="flex flex-col h-full rounded-xl bg-muted/30 border border-border overflow-hidden max-w-2xl mx-auto shadow-sm">
+    <div class="p-4 border-b border-border bg-white/50 backdrop-blur-sm flex items-center gap-3">
+        <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+            AI
+        </div>
+        <div>
+            <div class="text-sm font-medium">Assistant</div>
+            <div class="text-[10px] text-muted-foreground flex items-center gap-1">
+                <span class="block w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                Online
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex-1 p-4 space-y-4 overflow-y-auto">
+        <div class="flex gap-3">
+             <div class="h-8 w-8 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary text-xs font-bold mt-1">
+                AI
+            </div>
+            <div class="bg-white border border-border p-3 rounded-lg rounded-tl-none text-sm shadow-sm max-w-[85%]">
+                Hello! How can I help you today?
+            </div>
+        </div>
+
+        <div class="flex gap-3 flex-row-reverse">
+            <div class="h-8 w-8 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-muted-foreground text-xs font-bold mt-1">
+                U
+            </div>
+            <div class="bg-primary text-primary-foreground p-3 rounded-lg rounded-tr-none text-sm shadow-sm max-w-[85%]">
+                Show me the weather in Tokyo.
+            </div>
+        </div>
+         <div class="flex gap-3">
+             <div class="h-8 w-8 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary text-xs font-bold mt-1">
+                AI
+            </div>
+            <div class="bg-white border border-border p-3 rounded-lg rounded-tl-none text-sm shadow-sm max-w-[85%]">
+                It's currently 18°C and cloudy in Tokyo.
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 border-t border-border bg-white">
+        <div class="relative">
+            <input type="text" 
+                   placeholder="Type a message..." 
+                   class="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-muted/50 text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
+            <div class="absolute right-3 top-2.5 text-muted-foreground">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="opacity-50">
+                    <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>

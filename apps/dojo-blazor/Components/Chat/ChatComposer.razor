@@ -1,0 +1,25 @@
+<div class="space-y-4">
+    <div class="rounded-xl border border-border bg-white/90 p-2 shadow-sm flex items-center gap-2">
+        <div class="h-9 w-9 rounded-lg bg-muted/60 text-muted-foreground flex items-center justify-center">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+        </div>
+        <input class="flex-1 h-9 bg-transparent px-1 text-sm placeholder:text-muted-foreground focus:outline-none" placeholder="Type a message..." />
+        <button class="h-9 w-9 rounded-lg bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 flex items-center justify-center" type="button" aria-label="Send message">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+        </button>
+    </div>
+    <div class="flex items-center gap-2 text-[10px] text-muted-foreground">
+        <span class="inline-flex items-center gap-1">
+            <span class="block w-2 h-2 rounded-full bg-green-500"></span>
+            Online
+        </span>
+        <span>•</span>
+        <span>Responses are mocked for the demo preview.</span>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+@using DojoBlazor.Models
+
+<div class="h-full">
+    <div class="px-4 pt-4 pb-2">
+        <h2 class="transition-all duration-300 ease-in-out inline-block whitespace-nowrap text-[10px] text-muted-foreground uppercase font-medium tracking-wide opacity-100 scale-100 w-fit">
+            Demos
+        </h2>
+    </div>
+    <ul class="px-3 space-y-2">
+        @if (Demos != null)
+        {
+            @foreach (var demo in Demos)
+            {
+                var isSelected = SelectedDemoId == demo.Id;
+                <li @key="demo.Id">
+                        <button class="@($"w-full text-left py-3 px-3 rounded-lg border transition-colors flex flex-col gap-0.5 {(isSelected ? "bg-white border-[#CDBDFF]" : "bg-white/60 border-transparent hover:border-[#E0D6FF] hover:bg-white/80")}")"
+                            @onclick="() => OnSelect.InvokeAsync(demo.Id)">
+                        <div class="text-sm font-medium leading-tight text-foreground">@demo.Name</div>
+                        <div class="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                            @demo.Description
+                        </div>
+                        @if (demo.Tags != null && demo.Tags.Any())
+                        {
+                            <div class="flex gap-1.5 flex-wrap mt-1">
+                                @foreach (var tag in demo.Tags)
+                                {
+                                    <span class="@($"text-[10px] px-2 py-0.5 rounded-full border {(isSelected ? "bg-primary text-primary-foreground border-primary" : "bg-white/70 text-primary border-[#D9CFFF]")}")">
+                                        @tag
+                                    </span>
+                                }
+                            </div>
+                        }
+                    </button>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<FeatureConfig> Demos { get; set; } = Enumerable.Empty<FeatureConfig>();
+
+    [Parameter]
+    public string? SelectedDemoId { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSelect { get; set; }
+}

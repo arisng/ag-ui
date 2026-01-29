@@ -1,0 +1,131 @@
+﻿@page "/"
+@page "/{IntegrationId}"
+@using DojoBlazor.Models
+@using DojoBlazor.Services
+
+<PageTitle>AG-UI | Dojo</PageTitle>
+
+<div class="h-full w-full flex flex-col lg:flex-row gap-4">
+    <div class="flex-1 min-h-0">
+        <div class="h-full min-h-[520px] rounded-2xl border border-border bg-white/80 backdrop-blur shadow-sm flex flex-col">
+            <div class="px-8 pt-10 pb-6 flex flex-col items-center text-center gap-4">
+                <p class="text-xl font-semibold tracking-tight text-foreground">
+                    What would you like to build today?
+                </p>
+                <button type="button" class="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-muted/60 transition">
+                    Write a sonnet
+                </button>
+            </div>
+            <div class="flex-1 px-8 pb-10 flex flex-col items-center">
+                <div class="w-full max-w-2xl rounded-2xl border border-border bg-white/80 p-6 shadow-sm space-y-5">
+                    <div class="text-sm text-muted-foreground">
+                        Here’s a sonnet inspired by your prompt:
+                    </div>
+                    <div class="text-base leading-relaxed text-foreground whitespace-pre-line">
+                        Upon the canvas of the morning light,
+                        I stitch my dreams with patient, silver thread.
+                        The city hums, a chorus soft and bright,
+                        While petals bow to every word unsaid.
+
+                        The breeze composes verses in the trees,
+                        A whispered rhyme that lingers on the air.
+                        I place my hopes within the turning seas,
+                        And find their echoes in a lover’s stare.
+
+                        Let ink and breath conspire to gently prove
+                        That wonder blooms where steadfast hearts reside.
+                        Each line a lantern for the ones we love,
+                        Each cadence warm, a tide against the tide.
+
+                        So keep this song, a compass for the night,
+                        And let it guide you home by tender light.
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 border-t border-border/60">
+                        <button type="button" class="h-9 w-9 rounded-full border border-border bg-white text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition" aria-label="Copy">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                        </button>
+                        <button type="button" class="h-9 w-9 rounded-full border border-border bg-white text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition" aria-label="Like">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M7 10v12" />
+                                <path d="M15 5.88 14 10h6v7a2 2 0 0 1-2 2h-7l-4-7V9a2 2 0 0 1 2-2h4z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="h-9 w-9 rounded-full border border-border bg-white text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition" aria-label="Dislike">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M17 14V2" />
+                                <path d="M9 18.12 10 14H4V7a2 2 0 0 1 2-2h7l4 7v3a2 2 0 0 1-2 2H9z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="h-9 w-9 rounded-full border border-border bg-white text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition" aria-label="Regenerate">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+                                <path d="M21 3v6h-6" />
+                            </svg>
+                        </button>
+                        <button type="button" class="h-9 w-9 rounded-full border border-border bg-white text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition" aria-label="Share">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <path d="M8.59 13.51 15.42 17.5" />
+                                <path d="M15.41 6.5 8.59 10.49" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full max-w-2xl mt-6 space-y-5">
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" class="rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/60 transition">
+                            Make it more dramatic
+                        </button>
+                        <button type="button" class="rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/60 transition">
+                            Shorten to 4 lines
+                        </button>
+                        <button type="button" class="rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/60 transition">
+                            Add a hopeful ending
+                        </button>
+                    </div>
+                    <div class="rounded-full border border-border bg-white/90 shadow-sm px-5 py-3 flex items-center gap-3">
+                        <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h8" />
+                            <path d="M16 3h5v5" />
+                            <path d="m16 3 5 5" />
+                        </svg>
+                        <input class="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none" placeholder="Ask for another version" />
+                        <button type="button" class="h-9 w-9 rounded-full bg-foreground text-background flex items-center justify-center shadow-sm hover:opacity-90 transition" aria-label="Send">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M22 2 11 13" />
+                                <path d="m22 2-7 20-4-9-9-4Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="text-xs text-muted-foreground text-center">
+                        Powered by CopilotKit
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aside class="w-full lg:w-[360px] xl:w-[400px] min-h-[420px] flex flex-col">
+        <div class="h-full min-h-0 rounded-xl border border-border bg-white/70 backdrop-blur shadow-sm overflow-hidden flex flex-col">
+            <ChatHeader />
+
+            <ChatMessageList />
+
+            <div class="shrink-0 p-4 border-t border-border bg-white/90 space-y-4">
+                <ChatSuggestions />
+                <ChatComposer />
+            </div>
+        </div>
+    </aside>
+</div>
+
+@code {
+    [Parameter]
+    public string? IntegrationId { get; set; }
+
+}

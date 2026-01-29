@@ -1,0 +1,247 @@
+@using DojoBlazor.Models
+@using DojoBlazor.Services
+@using DojoBlazor.Components.Shared
+@inject NavigationManager NavManager
+@implements IDisposable
+
+<div class="flex flex-col h-full w-80 min-w-[296px] flex-shrink-0 rounded-xl overflow-hidden border border-[#E5DEFF] bg-[#F6F2FF]">
+    @* Header *@
+    <div class="px-5 pt-5 pb-3">
+        <div class="flex items-center justify-between ml-1">
+            <h1 class="text-lg font-light text-foreground">
+                AG-UI Interactive Dojo
+            </h1>
+        </div>
+    </div>
+
+    @* Controls *@
+    <div class="px-5 pt-3 pb-5 border-b border-[#E5DEFF] space-y-5">
+        @* Integration Picker *@
+        <div class="mb-6">
+            <div class="flex items-center gap-2 mb-2 px-1">
+                <label class="text-[10px] text-muted-foreground uppercase font-medium tracking-wide whitespace-nowrap">Integrations</label>
+                <div class="h-[1px] bg-border w-full"></div>
+            </div>
+
+            <div class="relative">
+                <button class="flex w-full items-center justify-between h-9 rounded-sm gap-2 px-3 transition-colors hover:bg-white/70 text-left"
+                        @onclick="ToggleIntegrationMenu">
+                    <span class="pb-[2px] text-foreground font-medium leading-[22px] inline-block truncate">
+                        @(CurrentIntegration?.Name ?? "Select Integration")
+                    </span>
+                    <span class="text-muted-foreground">▾</span>
+                </button>
+
+                @if (_integrationMenuOpen)
+                {
+                    <div class="fixed inset-0 z-10" @onclick="CloseIntegrationMenu"></div>
+                    <div class="absolute left-0 right-0 mt-2 z-20 bg-white border border-border shadow-md rounded-sm overflow-hidden">
+                        @foreach (var integration in MockData.Integrations)
+                        {
+                            <button class="w-full text-left px-4 h-11 hover:bg-muted/40 text-foreground"
+                                    @onclick="() => OnIntegrationSelect(integration.Id)">
+                                @integration.Name
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        @* View Picker *@
+        <div class="mb-0">
+             <div class="flex items-center gap-2 mb-2 px-1">
+                <label class="text-[10px] text-muted-foreground uppercase font-medium tracking-wide whitespace-nowrap">View</label>
+                <div class="h-[1px] bg-border w-full"></div>
+            </div>
+            <div class="flex w-full rounded-lg bg-transparent p-1">
+                <button class="@GetViewTabClass("preview")" @onclick="@(() => SetView("preview"))">
+                    <span class="mr-2">👁️</span>
+                    <span>Preview</span>
+                </button>
+                <button class="@GetViewTabClass("code")" @onclick="@(() => SetView("code"))">
+                    <span class="mr-2">💻</span>
+                    <span>Code</span>
+                </button>
+                <button class="@GetViewTabClass("readme")" @onclick="@(() => SetView("readme"))">
+                    <span class="mr-2">📖</span>
+                    <span>Docs</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @* Demo List *@
+    <div class="flex-1 overflow-auto pt-2">
+        <DemoList Demos="@(string.IsNullOrEmpty(_currentIntegrationId) ? MockData.Features : _filteredDemos)"
+                  SelectedDemoId="@_currentFeatureId"
+                  OnSelect="@OnDemoSelect" />
+    </div>
+</div>
+
+@code {
+    private string? _currentIntegrationId;
+    private string? _currentFeatureId;
+    private string _currentView = "preview";
+    private List<FeatureConfig> _filteredDemos = new();
+
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += HandleLocationChanged;
+        ParseUrl(NavManager.Uri);
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        ParseUrl(e.Location);
+        StateHasChanged();
+    }
+
+    private void ParseUrl(string uri)
+    {
+        // Expected URL formats:
+        // /
+        // /{integrationId}
+        // /{integrationId}/feature/{featureId}
+        
+        var uriObj = new Uri(uri);
+        var segments = uriObj.Segments.Select(s => s.Trim('/')).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+        string? newIntegrationId = null;
+        string? newFeatureId = null;
+
+        if (segments.Length > 0)
+        {
+            newIntegrationId = segments[0];
+            
+            // Validate integration ID
+            if (!MockData.Integrations.Any(i => i.Id == newIntegrationId))
+            {
+                newIntegrationId = null;
+            }
+        }
+
+        if (segments.Length > 2 && segments[1] == "feature")
+        {
+            newFeatureId = segments[2];
+        }
+
+        if (newIntegrationId != _currentIntegrationId)
+        {
+            _currentIntegrationId = newIntegrationId;
+            UpdateFilteredDemos();
+        }
+
+        _currentFeatureId = newFeatureId;
+
+        // Parse query string for View
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uriObj.Query);
+        if (query.TryGetValue("view", out var viewVal))
+        {
+            _currentView = viewVal.ToString().ToLower();
+        }
+        else
+        {
+             _currentView = "preview";
+        }
+    }
+
+    private void UpdateFilteredDemos()
+    {
+        if (string.IsNullOrEmpty(_currentIntegrationId))
+        {
+            _filteredDemos = new();
+            return;
+        }
+
+        var integration = MockData.Integrations.FirstOrDefault(i => i.Id == _currentIntegrationId);
+        if (integration == null)
+        {
+             _filteredDemos = new();
+             return;
+        }
+
+        _filteredDemos = MockData.Features
+            .Where(f => integration.Features.Contains(f.Id))
+            .ToList();
+    }
+
+    private void ToggleIntegrationMenu()
+    {
+        _integrationMenuOpen = !_integrationMenuOpen;
+    }
+
+    private void CloseIntegrationMenu()
+    {
+        _integrationMenuOpen = false;
+    }
+
+    private void OnIntegrationSelect(string integrationId)
+    {
+        _integrationMenuOpen = false;
+        if (!string.IsNullOrEmpty(integrationId))
+        {
+            var uri = GetUriWithView($"/{integrationId}");
+            NavManager.NavigateTo(uri);
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
+    }
+
+    private void OnDemoSelect(string demoId)
+    {
+        if (!string.IsNullOrEmpty(_currentIntegrationId))
+        {
+            var uri = GetUriWithView($"/{_currentIntegrationId}/feature/{demoId}");
+            NavManager.NavigateTo(uri);
+        }
+    }
+    
+    private void SetView(string view)
+    {
+        _currentView = view;
+        var uri = GetUriWithView(NavManager.Uri);
+        NavManager.NavigateTo(uri);
+    }
+
+    private string GetViewTabClass(string viewName)
+    {
+        var baseClass = "cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-lg px-2 h-8 text-sm font-medium gap-1 flex-1 transition-colors";
+        if (_currentView == viewName)
+        {
+            return baseClass + " bg-white text-primary shadow-none";
+        }
+        return baseClass + " text-primary hover:bg-white/50";
+    }
+
+    private string GetUriWithView(string uri)
+    {
+        if (_currentView == "preview")
+        {
+            if (uri.StartsWith('/'))
+            {
+                return uri;
+            }
+
+            var uriObj = new Uri(uri);
+            return uriObj.GetLeftPart(UriPartial.Path);
+        }
+
+        return NavManager.GetUriWithQueryParameters(uri,
+            new Dictionary<string, object?> { ["view"] = _currentView });
+    }
+
+    private Integration? CurrentIntegration =>
+        string.IsNullOrEmpty(_currentIntegrationId)
+            ? null
+            : MockData.Integrations.FirstOrDefault(i => i.Id == _currentIntegrationId);
+
+    private bool _integrationMenuOpen;
+}
